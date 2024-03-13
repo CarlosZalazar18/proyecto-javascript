@@ -1,72 +1,146 @@
-let word, hiddenWord, guessesLeft, guessedLetters;
+document.addEventListener("DOMContentLoaded", function() {
+    let word, hiddenWord, guessesLeft, guessedLetters;
 
-function startGame() {
-    // Array de palabras para adivinar
-    const words = ['javascript', 'html', 'css', 'python', 'java', 'ruby', 'php', 'swift', 'boca', 'river', 'empanadas', 'futbol'];
+    const wordContainer = document.getElementById('word-container');
+    const hangmanText = document.getElementById('hangman-text');
+    const guessesSpan = document.getElementById('guesses');
+    const lettersContainer = document.getElementById('letters');
+    const messageDiv = document.getElementById('message');
+    const restartButton = document.getElementById('restart-button');
 
-    // Seleccionar una palabra aleatoria del array
-    word = words[Math.floor(Math.random() * words.length)];
+    function startGame() {
+        const words = ['javascript', 'html', 'css', 'futbol', 'java', 'boca', 'river', 'empanadas', 'cocina', 'hamburguesas', 'pizzas', 'regalo', 'juego', 'casa', 'pelota', 'tienda', 'planta', 'computadora', 'teclado', 'dinero', 'doctor', 'raton', 'perfume', 'ventilador',  'chocolate', 'fideos', 'argentina', 'vaso', 'auriculares', 'cliente', 'mensaje', 'carta', 'espejo', 'internet', 'celular', 'television'];
+        word = words[Math.floor(Math.random() * words.length)];
+        hiddenWord = '_'.repeat(word.length);
+        guessesLeft = 10;
+        guessedLetters = [];
 
-    // Mostrar los guiones bajos para la palabra oculta
-    hiddenWord = '_'.repeat(word.length);
-    guessesLeft = 10;
-    guessedLetters = [];
+        wordContainer.textContent = hiddenWord.split('').join(' ');
+        hangmanText.textContent = getHangmanDrawing(guessesLeft);
+        guessesSpan.textContent = guessesLeft;
+        lettersContainer.innerHTML = '';
 
-    // Mostrar la palabra oculta y los intentos restantes
-    document.getElementById('word-container').innerText = hiddenWord.split('').join(' ');
-    document.getElementById('guesses').innerText = guessesLeft;
+        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+        alphabet.split('').forEach(letter => {
+            const letterButton = document.createElement('button');
+            letterButton.textContent = letter;
+            letterButton.addEventListener('click', () => handleGuess(letter));
+            lettersContainer.appendChild(letterButton);
+        });
 
-    // Mostrar las letras disponibles
-    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-    document.getElementById('letters').innerHTML = '';
-    alphabet.split('').forEach(letter => {
-        const letterButton = document.createElement('button');
-        letterButton.innerText = letter;
-        letterButton.addEventListener('click', () => handleGuess(letter));
-        document.getElementById('letters').appendChild(letterButton);
-    });
+        restartButton.style.display = 'none';
+        messageDiv.textContent = '';
+    }
 
-    document.getElementById('restart-button').style.display = 'none';
-    document.getElementById('message').innerText = '';
-}
-
-function handleGuess(letter) {
-    if (guessesLeft > 0 && !guessedLetters.includes(letter)) {
-        guessedLetters.push(letter);
-        if (word.includes(letter)) {
-            // Actualizar la palabra oculta con la letra adivinada
-            hiddenWord = word.split('').map((char, index) => (char === letter ? letter : hiddenWord[index])).join('');
-            document.getElementById('word-container').innerText = hiddenWord.split('').join(' ');
-
-            // Verificar si el jugador ha ganado
-            if (hiddenWord === word) {
-                document.getElementById('message').innerText = '¡Felicidades! ¡Has adivinado la palabra!';
-                endGame();
-            }
-        } else {
-            // Reducir el número de intentos restantes
-            guessesLeft--;
-            document.getElementById('guesses').innerText = guessesLeft;
-
-            // Verificar si el jugador ha perdido
-            if (guessesLeft === 0) {
-                document.getElementById('message').innerText = `¡Oh no! ¡Has perdido! La palabra era "${word}".`;
-                endGame();
+    function handleGuess(letter) {
+        if (guessesLeft > 0 && !guessedLetters.includes(letter)) {
+            guessedLetters.push(letter);
+            if (word.includes(letter)) {
+                hiddenWord = word.split('').map((char, index) => (char === letter ? letter : hiddenWord[index])).join('');
+                wordContainer.textContent = hiddenWord.split('').join(' ');
+                if (hiddenWord === word) {
+                    messageDiv.textContent = '¡Felicidades! ¡Has adivinado la palabra!';
+                    endGame();
+                }
+            } else {
+                guessesLeft--;
+                guessesSpan.textContent = guessesLeft;
+                hangmanText.textContent = getHangmanDrawing(guessesLeft);
+                if (guessesLeft === 0) {
+                    messageDiv.textContent = `¡Oh no! ¡Has perdido! La palabra era "${word}".`;
+                    endGame();
+                }
             }
         }
     }
-}
 
-function endGame() {
-    // Desactivar botones de letras
-    const letterButtons = document.getElementById('letters').getElementsByTagName('button');
-    for (let button of letterButtons) {
-        button.disabled = true;
+    function endGame() {
+        const letterButtons = document.querySelectorAll('#letters button');
+        letterButtons.forEach(button => {
+            button.disabled = true;
+        });
+        restartButton.style.display = 'block';
     }
-    // Mostrar botón de reinicio
-    document.getElementById('restart-button').style.display = 'block';
-}
 
-document.getElementById('restart-button').addEventListener('click', startGame);
+    function getHangmanDrawing(guessesLeft) {
+        const hangmanDrawings = [
+            `
+             _______
+            |/      |
+            |      
+            |     
+            |      
+            |     
+           _|_____
+          | | | | |
+          |_|_|_|_|`,
+            `
+             _______
+            |/      |
+            |      (_)
+            |     
+            |      
+            |     
+           _|_____
+          | | | | |
+          |_|_|_|_|`,
+            `
+             _______
+            |/      |
+            |      (_)
+            |       |
+            |       
+            |     
+           _|_____
+          | | | | |
+          |_|_|_|_|`,
+            `
+             _______
+            |/      |
+            |      (_)
+            |      /|
+            |       
+            |     
+           _|_____
+          | | | | |
+          |_|_|_|_|`,
+            `
+             _______
+            |/      |
+            |      (_)
+            |      /|\\
+            |       
+            |     
+           _|_____
+          | | | | |
+          |_|_|_|_|`,
+            `
+             _______
+            |/      |
+            |      (_)
+            |      /|\\
+            |      /
+            |     
+           _|_____
+          | | | | |
+          |_|_|_|_|`,
+            `
+             _______
+            |/      |
+            |      (_)
+            |      /|\\
+            |      / \\
+            |     
+           _|_____
+          | | | | |
+          |_|_|_|_|`
+        ];
 
-startGame(); // Iniciar juego al cargar la página
+        return hangmanDrawings[hangmanDrawings.length - guessesLeft - 1];
+    }
+
+    restartButton.addEventListener('click', startGame);
+
+    startGame();
+});
+

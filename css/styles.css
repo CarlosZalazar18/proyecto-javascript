@@ -1,18 +1,21 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
+    background-color: #232852;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 #game-container {
     max-width: 600px;
-    margin: 50px auto;
-    background-color: #fff;
+    background-color: #e2f2aa;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 h1 {
@@ -25,12 +28,21 @@ h1 {
     color: #333;
 }
 
+#hangman {
+    margin-bottom: 20px;
+}
+
+#hangman-text {
+    font-family: monospace;
+    white-space: pre;
+}
+
 #guesses-left {
     font-size: 18px;
     color: #555;
 }
 
-#letters {
+.letters {
     margin-top: 20px;
 }
 
@@ -49,14 +61,14 @@ button:hover {
     background-color: #0056b3;
 }
 
-#message {
+.message {
     margin-top: 20px;
     font-size: 20px;
     font-weight: bold;
     color: #d9534f;
 }
 
-#restart-button {
+.restart-button {
     font-size: 18px;
     padding: 10px 20px;
     margin-top: 20px;
@@ -68,6 +80,6 @@ button:hover {
     display: none;
 }
 
-#restart-button:hover {
+.restart-button:hover {
     background-color: #218838;
 }

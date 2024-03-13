@@ -8,16 +8,29 @@
 
     <link rel="stylesheet" href="./css/styles.css">
 </head>
-
 <body>
-    <h1>Juego del Ahorcado</h1>
-    <div id="word-container"></div>
-    <div id="guesses-left">Intentos restantes: <span id="guesses"></span></div>
-    <div id="letters"></div>
-    <div id="message"></div>
-    <button id="restart-button" style="display: none;">Reiniciar Juego</button>
-
+    <div id="game-container">
+        <h1>Juego del Ahorcado</h1>
+        <div id="word-container"></div>
+        <div id="hangman">
+            <pre id="hangman-text">
+      _______
+     |/      |
+     |      
+     |     
+     |      
+     |     
+    _|_____
+    | | | | |
+    |_|_|_|_|
+            </pre>
+        </div>
+        <div id="guesses-left">Intentos restantes: <span id="guesses"></span></div>
+        <div id="letters" class="letters"></div>
+        <div id="message" class="message"></div>
+        <button id="restart-button" class="restart-button">Reiniciar Juego</button>
+    </div>
+    
     <script src="main.js"></script>
-</body>
-
-</html>
+    </body>
+    </html>
